@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "types": [
+      "jest",
+      "node",
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "@types/*.d.ts",
+    "tests/**/*.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

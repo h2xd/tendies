@@ -1,0 +1,36 @@
+{
+  "name": "tendies",
+  "version": "0.1.0",
+  "description": "NPM terminal app to monitor your stonks through the non-bloomberg terminal",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/h2xd/tendies.git"
+  },
+  "keywords": [
+    "finance",
+    "terminal",
+    "stocks",
+    "stonks",
+    "tendies",
+    "money"
+  ],
+  "author": "Andreas Schujkow <a.schujkow@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/h2xd/tendies/issues"
+  },
+  "homepage": "https://github.com/h2xd/tendies#readme",
+  "dependencies": {
+    "commander": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.22",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}
