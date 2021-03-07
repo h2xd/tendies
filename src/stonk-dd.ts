@@ -9,7 +9,6 @@ type DDWebsite =
   | "BARCHART_EE"
   | "TIPRANKS"
   | "TIPRANKS_ANALYSIS"
-  | "YAHOO_FINANCE"
 
 const ddUrls: Map<DDWebsite, String> = new Map([
   [
@@ -28,10 +27,6 @@ const ddUrls: Map<DDWebsite, String> = new Map([
   [
     "TIPRANKS_ANALYSIS",
     "https://www.tipranks.com/stocks/{symbol}/stock-analysis",
-  ],
-  [
-    "YAHOO_FINANCE",
-    "https://finance.yahoo.com/quote/{symbol}/analysis?p={symbol}",
   ],
 ])
 
