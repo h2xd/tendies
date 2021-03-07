@@ -1,8 +1,7 @@
-import cheerioModule from "cheerio"
-
 const puppeteer = require("puppeteer")
 const cheerio = require("cheerio")
 const ora = require("ora")
+import yahooFinance from "yahoo-finance2"
 
 type DDWebsite =
   | "MARKETBEAT"
@@ -15,7 +14,7 @@ type DDWebsite =
 const ddUrls: Map<DDWebsite, String> = new Map([
   [
     "MARKETBEAT",
-    "https://www.marketbeat.com/stocks/NASDAQ/{symbol}/price-target/",
+    "https://www.marketbeat.com/stocks/NYSE/{symbol}/price-target/",
   ],
   [
     "BARCHART_OPINION",
@@ -35,6 +34,17 @@ const ddUrls: Map<DDWebsite, String> = new Map([
     "https://finance.yahoo.com/quote/{symbol}/analysis?p={symbol}",
   ],
 ])
+
+const convertToCurrency = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount)
+}
+
+const convertToReadableDate = (date: Date | number) => {
+  return new Intl.DateTimeFormat("en-US").format(date)
+}
 
 const getUrl = (symbol: string, page: DDWebsite) => {
   return ddUrls.get(page).replace("{symbol}", symbol)
@@ -68,7 +78,7 @@ const getMarketbeatData = async (symbol: string) => {
     .text()
     .trim()
 
-  return {rating, price}
+  return {rating, priceTarget: price}
 }
 
 const getBarchartData = async (symbol: string) => {
@@ -87,7 +97,7 @@ const getBarchartData = async (symbol: string) => {
     .text()
     .trim()
 
-  return {rating, price}
+  return {rating, priceTarget: convertToCurrency(price)}
 }
 
 const getTipranksData = async (symbol: string) => {
@@ -114,7 +124,22 @@ const getTipranksData = async (symbol: string) => {
     .find("text tspan")
     .text()
     .trim()
-  return {rating, price, analysis: `${analysis}/10`}
+  return {rating, priceTarget: price, analysis: `${analysis}/10`}
+}
+
+const getYahooFinanceData = async (symbol: string) => {
+  const result = await yahooFinance.quote(symbol)
+  return {
+    Name: result.displayName,
+    "1 year low": convertToCurrency(result.fiftyTwoWeekRange.low),
+    "1 year high": convertToCurrency(result.fiftyTwoWeekRange.high),
+    "Regular market price": convertToCurrency(result.regularMarketPrice),
+    "Dividend payout": convertToReadableDate(result.dividendDate),
+    "Trailing annual dividend rate": convertToCurrency(
+      result.trailingAnnualDividendRate
+    ),
+    Earnings: convertToReadableDate(result.earningsTimestamp),
+  }
 }
 
 const stonkDd = async (symbol: string) => {
@@ -123,7 +148,13 @@ const stonkDd = async (symbol: string) => {
   const mb = await getMarketbeatData(symbol)
   const bc = await getBarchartData(symbol)
   const tr = await getTipranksData(symbol)
-  console.log({marketbeat: mb, barchart: bc, tipranks: tr})
+  const yf = await getYahooFinanceData(symbol)
+  console.log("\n")
+  console.log("YAHOO FINANCE BASIC DATA")
+  console.table(yf)
+  console.log("\n")
+  console.log("ANALYSIS WEBSITES")
+  console.table({Marketbeat: mb, Barchart: bc, Tipranks: tr})
   spinner.succeed("Ready for lift-off")
 }
 
