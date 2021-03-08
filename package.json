@@ -26,7 +26,11 @@
   },
   "homepage": "https://github.com/h2xd/tendies#readme",
   "dependencies": {
-    "commander": "^7.0.0"
+    "cheerio": "^1.0.0-rc.5",
+    "commander": "^7.0.0",
+    "ora": "^5.3.0",
+    "puppeteer": "^8.0.0",
+    "yahoo-finance2": "^1.8.3"
   },
   "devDependencies": {
     "@types/node": "^14.14.22",
