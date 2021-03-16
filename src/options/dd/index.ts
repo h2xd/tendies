@@ -3,6 +3,7 @@ const cheerio = require("cheerio")
 const ora = require("ora")
 import yahooFinance from "yahoo-finance2"
 import { Option } from "../../@types/option";
+import {convertToCurrency} from "../../utils/convertToCurrency";
 
 export const DDOption: Option = {
   register(program) {
@@ -44,13 +45,6 @@ const ddUrls: Map<DDWebsite, String> = new Map([
     "https://www.tipranks.com/stocks/{symbol}/stock-analysis",
   ],
 ])
-
-const convertToCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount)
-}
 
 const convertToReadableDate = (date: Date | number) => {
   return new Intl.DateTimeFormat("en-US").format(date)

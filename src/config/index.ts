@@ -4,7 +4,8 @@ import { readFileSync, writeFileSync } from "fs";
 export const CONFIG_PATH = join(__dirname, '.tendies.config')
 
 export function readConfig() {
-  return readFileSync(CONFIG_PATH)
+  const configString = readFileSync(CONFIG_PATH).toString()
+  return JSON.parse(configString)
 }
 
 export function writeConfig(contents: string) {
