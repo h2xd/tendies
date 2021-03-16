@@ -2,6 +2,22 @@ const puppeteer = require("puppeteer")
 const cheerio = require("cheerio")
 const ora = require("ora")
 import yahooFinance from "yahoo-finance2"
+import { Option } from "../../@types/option";
+import {convertToCurrency} from "../../utils/convertToCurrency";
+
+export const DDOption: Option = {
+  register(program) {
+    program.option(
+      "-dd, --duediligence <symbol>",
+      "check wether you like this stock"
+    )
+  },
+  handle(options) {
+    if (options.duediligence) {
+      dd(options.duediligence)
+    }
+  }
+}
 
 type DDWebsite =
   | "MARKETBEAT"
@@ -29,13 +45,6 @@ const ddUrls: Map<DDWebsite, String> = new Map([
     "https://www.tipranks.com/stocks/{symbol}/stock-analysis",
   ],
 ])
-
-const convertToCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount)
-}
 
 const convertToReadableDate = (date: Date | number) => {
   return new Intl.DateTimeFormat("en-US").format(date)
@@ -137,7 +146,7 @@ const getYahooFinanceData = async (symbol: string) => {
   }
 }
 
-const stonkDd = async (symbol: string) => {
+const dd = async (symbol: string) => {
   console.log(`${symbol} GOOD! WE LIKE THIS STOCK!`)
   const spinner = ora("Getting directions to moon…").start()
   const mb = await getMarketbeatData(symbol)
@@ -152,5 +161,3 @@ const stonkDd = async (symbol: string) => {
   console.table({Marketbeat: mb, Barchart: bc, Tipranks: tr})
   spinner.succeed("Ready for lift-off")
 }
-
-export default stonkDd

@@ -105,3 +105,9 @@ dist
 
 # Webstorm
 .idea/
+
+# Export testfile
+test.json
+
+# Tendies configuration file
+.tendies.config
