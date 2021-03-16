@@ -105,3 +105,6 @@ dist
 
 # Webstorm
 .idea/
+
+# Export testfile
+test.json

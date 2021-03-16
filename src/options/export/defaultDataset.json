@@ -1,0 +1,9 @@
+{
+  "stocks": [
+    {
+      "symbol": "AAPL",
+      "averagePrice": 431,
+      "shares": 1
+    }
+  ]
+}

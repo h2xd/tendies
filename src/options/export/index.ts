@@ -1,5 +1,6 @@
+import { writeFileSync, copyFileSync } from "fs";
+import { join } from "path"
 import { Option } from "../../@types/option";
-import { writeFileSync } from "fs";
 
 export const ExportOption: Option = {
   register(program) {
@@ -9,7 +10,7 @@ export const ExportOption: Option = {
     )
     program.option(
       "--dummy <file>",
-      "get a default dataset, that you can fill up later, with your wifes boyfriend"
+      "Get a default JSON configuration - That you can fill up with your wifes boyfriend."
     )
   },
   handle(options) {
@@ -18,21 +19,16 @@ export const ExportOption: Option = {
     }
 
     if (options.dummy) {
-      console.log(options)
       try {
         writeFileSync(
           options.dummy,
-          JSON.stringify({
-            stocks: [
-              {
-                symbol: "AAPL",
-                averagePrice: 431,
-                shares: 1,
-              },
-            ],
-          }),
+          require('./defaultDataset.json'),
           {encoding: "utf8", flag: "w"}
         )
+
+        // File destination.txt will be created or overwritten by default.
+        copyFileSync(join(__dirname, 'defaultDataset.json'), options.dummy)
+        console.log(`${options.dummy} was created`);
       } catch (error) {
         console.error(error)
       }
