@@ -1,15 +1,30 @@
+import { readFileSync, stat } from "fs"
 import { Option } from "../../@types/option";
+import { writeConfig } from "../../config";
 
 export const ImportOption: Option = {
   register(program) {
     program.option(
-      "-i, --import",
-      "import your tendies file, or get a default file with --dummy"
+      "--import <file>",
+      "import your tendies file"
     )
   },
   handle(options) {
     if (options.import) {
-      console.log(options)
+      stat(options.import, (err) => {
+        if (err === null) {
+          const config = readFileSync(options.import, { encoding: "utf8" })
+          writeConfig(config)
+          return
+        }
+
+        if (err.code === 'ENOENT') {
+          console.error('file does not exist')
+          return
+        }
+
+        console.log('Some other error: ', err.code);
+      });
     }
   }
 }

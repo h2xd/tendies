@@ -1,11 +1,12 @@
-import { writeFileSync, copyFileSync } from "fs";
+import { copyFileSync } from "fs";
 import { join } from "path"
 import { Option } from "../../@types/option";
+import { CONFIG_PATH } from "../../config";
 
 export const ExportOption: Option = {
   register(program) {
     program.option(
-      "-e, --export",
+      "-e, --export <file>",
       "export your tendies file, to share it with your ape gang"
     )
     program.option(
@@ -14,18 +15,17 @@ export const ExportOption: Option = {
     )
   },
   handle(options) {
-    if (options.import) {
-      console.log(options)
+    if (options.export) {
+      try {
+        copyFileSync(CONFIG_PATH, options.export)
+        console.log(`${options.export} was created`);
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     if (options.dummy) {
       try {
-        writeFileSync(
-          options.dummy,
-          require('./defaultDataset.json'),
-          {encoding: "utf8", flag: "w"}
-        )
-
         // File destination.txt will be created or overwritten by default.
         copyFileSync(join(__dirname, 'defaultDataset.json'), options.dummy)
         console.log(`${options.dummy} was created`);

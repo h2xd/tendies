@@ -108,3 +108,6 @@ dist
 
 # Export testfile
 test.json
+
+# Tendies configuration file
+.tendies.config
