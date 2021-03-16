@@ -2,6 +2,21 @@ const puppeteer = require("puppeteer")
 const cheerio = require("cheerio")
 const ora = require("ora")
 import yahooFinance from "yahoo-finance2"
+import { Option } from "../../@types/option";
+
+export const DDOption: Option = {
+  register(program) {
+    program.option(
+      "-dd, --duediligence <symbol>",
+      "check wether you like this stock"
+    )
+  },
+  handle(options) {
+    if (options.duediligence) {
+      dd(options.duediligence)
+    }
+  }
+}
 
 type DDWebsite =
   | "MARKETBEAT"
@@ -137,7 +152,7 @@ const getYahooFinanceData = async (symbol: string) => {
   }
 }
 
-const stonkDd = async (symbol: string) => {
+const dd = async (symbol: string) => {
   console.log(`${symbol} GOOD! WE LIKE THIS STOCK!`)
   const spinner = ora("Getting directions to moon…").start()
   const mb = await getMarketbeatData(symbol)
@@ -152,5 +167,3 @@ const stonkDd = async (symbol: string) => {
   console.table({Marketbeat: mb, Barchart: bc, Tipranks: tr})
   spinner.succeed("Ready for lift-off")
 }
-
-export default stonkDd
