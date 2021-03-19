@@ -1,38 +1,34 @@
+import { copyFileSync } from "fs";
+import { join } from "path"
 import { Option } from "../../@types/option";
-import { writeFileSync } from "fs";
+import { CONFIG_PATH } from "../../config";
 
 export const ExportOption: Option = {
   register(program) {
     program.option(
-      "-e, --export",
+      "-e, --export <file>",
       "export your tendies file, to share it with your ape gang"
     )
     program.option(
       "--dummy <file>",
-      "get a default dataset, that you can fill up later, with your wifes boyfriend"
+      "Get a default JSON configuration - That you can fill up with your wifes boyfriend."
     )
   },
   handle(options) {
-    if (options.import) {
-      console.log(options)
+    if (options.export) {
+      try {
+        copyFileSync(CONFIG_PATH, options.export)
+        console.log(`${options.export} was created`);
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     if (options.dummy) {
-      console.log(options)
       try {
-        writeFileSync(
-          options.dummy,
-          JSON.stringify({
-            stocks: [
-              {
-                symbol: "AAPL",
-                averagePrice: 431,
-                shares: 1,
-              },
-            ],
-          }),
-          {encoding: "utf8", flag: "w"}
-        )
+        // File destination.txt will be created or overwritten by default.
+        copyFileSync(join(__dirname, 'defaultDataset.json'), options.dummy)
+        console.log(`${options.dummy} was created`);
       } catch (error) {
         console.error(error)
       }
